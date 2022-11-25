@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 13:00:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2022/11/24 11:24:26 by kle-rest         ###   ########.fr       */
+/*   Updated: 2022/11/24 13:19:51 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,76 +24,54 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-int	ft_memcheck(char *memo)
-{
-	int	i;
-
-	i = 0;
-	if (!memo)
-		return (-2);
-	while (memo[i])
-	{
-		if (memo[i] == '\n')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-char	*ft_strdup(char *s)
+char	*ft_strchr(char *s, int c)
 {
 	int		i;
-	char	*sm;
+	char	*sc;
 
+	sc = s;
 	i = 0;
-	sm = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!sm)
-		return (0);
-	while (s[i])
+	if (c > 127)
+		return (sc);
+	while (sc[i])
 	{
-		sm[i] = s[i];
+		if (sc[i] == c)
+			return (&sc[i]);
 		i++;
 	}
-	sm[i] = '\0';
-	return (sm);
+	if (sc[i] == c)
+		return (&sc[i]);
+	return (0);
 }
 
-char	*ft_substr(char *s, int start, int len)
+void	*ft_calloc(int nmemb, int size)
 {
+	char	*str;
 	int	i;
-	int	j;
-	char	*sm;
 
+	str = NULL;
 	i = 0;
-	j = start;
-	if (!s)
+	if (!nmemb || !size)
+		return (malloc(0));
+	if (nmemb > 4294967295 / size)
 		return (0);
-	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
-	if (ft_strlen(s) - start < len)
-		len = ft_strlen(s) - start;
-	sm = malloc(sizeof(char) * (len + 1));
-	if (!sm)
-		return (0);
-	while (len > 0)
+	str = malloc(size * nmemb);
+	if (!str)
+		return (NULL);
+	while (i < size * nmemb)
 	{
-		sm[i] = s[j];
+		str[i] = 0;
 		i++;
-		j++;
-		len--;
 	}
-	sm[i] = '\0';
-	return (sm);
+	return ((void *)str);
 }
-
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	//printf("ft_join\n");
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	char	*s12;
-	int	len;
+	int		len;
 
 	i = 0;
 	j = 0;
@@ -111,7 +89,6 @@ char	*ft_strjoin(char *s1, char *s2)
 			s12[i] = s2[j++];
 		i++;
 	}
-	free(s1);
 	s12[i] = 0;
 	return (s12);
 }

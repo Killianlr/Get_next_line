@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 09:18:20 by kle-rest          #+#    #+#             */
-/*   Updated: 2022/11/24 11:37:21 by kle-rest         ###   ########.fr       */
+/*   Updated: 2022/11/24 13:55:55 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,51 +17,56 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 
-#define BUFFER_SIZE 200000
+#define BUFFER_SIZE 10
 
-char	*ft_free(char *fuck)
+char	*ft_free(char *buf_save, char *buffer)
 {
-	char	*retour;
+	char	*tmp;
 
-	retour = fuck;
-	free(fuck);
-	return (retour);
+	tmp = ft_strjoin(buf_save, buffer);
+	free(buffer);
+	return (tmp);
 }
 
-char	*gnl_end(char *memo)
+char	*ft_read(int fd, char *buf_save)
 {
-	char	*line;
+	char	*buffer;
+	int		ret;
 
-	line = ft_strdup(memo);
-	free(memo);
-	return (line);
+	ret = 1;
+	buffer = ft_calloc(BUFFER_SIZE, 1);
+	while (ret > 0)
+	{
+		ret = read(fd, buffer, BUFFER_SIZE);
+		if (ret == -1)
+		{
+			free(buf_save);
+			return (0);
+		}
+		buffer[ret] = 0;
+		buffer = ft_free(buf_save, buffer);
+		if (ft_strchr(buffer, '\n'))
+		{
+			buf_save = ft_strchr(buffer, '\n');
+			break ;
+		}
+	}
+	return (buffer);
 }
 
 char	*get_next_line(int fd)
 {
-	char		buf[BUFFER_SIZE];
-	static char	*memo;
-	int			ret;
+	static char *buf;
 	char		*line;
-	char		*tmp;
 
-	if (!memo)
-		memo = malloc(0);
-	while (ft_memcheck(memo) < 0)
-	{
-		ret = read(fd, buf, BUFFER_SIZE);
-		if (ret == -1)
-			return (0);
-		buf[ret] = '\0';
-		memo = ft_strjoin(memo, buf);
-		if (ret == 0)
-			return (gnl_end(memo));
-	}
-	line = ft_substr(memo, 0, ft_memcheck(memo) + 1);
-	line = ft_free(line);
-	memo = ft_substr(memo, ft_memcheck(memo) + 1, ft_strlen(memo) - ft_memcheck(memo));
-	//memo = ft_free(memo);
-	return (line);
+	if (fd < 0 || fd > 16 || BUFFER_SIZE <= 0 || !buf)
+		return (NULL);
+	buf = ft_read(fd, buf);
+	if (!buf)
+		return (NULL);
+	line = ft_line(buf);
+	buf = ft_next(buf);
+	
 }
 
 int	main(void)
@@ -69,7 +74,7 @@ int	main(void)
 	int	fd;
 	char	*line;
 
-	fd = open("txt", O_RDONLY);
+	fd = open("test", O_RDONLY);
 	if (fd == -1)
 		return (1);
 	line = get_next_line(fd);
