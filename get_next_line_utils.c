@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/19 13:00:56 by kle-rest          #+#    #+#             */
-/*   Updated: 2022/11/24 13:19:51 by kle-rest         ###   ########.fr       */
+/*   Updated: 2022/12/09 07:39:32 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,29 @@ int	ft_strlen(char *str)
 {
 	int	i;
 
+	i = 0;
 	if (!str)
 		return (0);
-	i = 0;
 	while (str[i])
 		i++;
 	return (i);
 }
 
-char	*ft_strchr(char *s, int c)
+int	ft_checkline(char *s)
 {
 	int		i;
-	char	*sc;
-
-	sc = s;
 	i = 0;
-	if (c > 127)
-		return (sc);
-	while (sc[i])
+	if (!s)
+		return (0);
+	while(s[i] != '\0')
 	{
-		if (sc[i] == c)
-			return (&sc[i]);
+//printf("cc\n");
+		if (s[i] == '\n')
+			return (1);
 		i++;
 	}
-	if (sc[i] == c)
-		return (&sc[i]);
 	return (0);
+
 }
 
 void	*ft_calloc(int nmemb, int size)
@@ -70,25 +67,31 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
 	int		j;
-	char	*s12;
-	int		len;
+	char	*len;
 
-	i = 0;
+	i = -1;
 	j = 0;
+	if (!s1)
+		s1 = ft_calloc(1, sizeof(char));
 	if (!s1 || !s2)
 		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	s12 = malloc(sizeof(char) * (len + 1));
-	if (!s12)
-		return (0);
-	while (i < len)
-	{
-		if (i < ft_strlen(s1))
-			s12[i] = s1[i];
-		else
-			s12[i] = s2[j++];
-		i++;
-	}
-	s12[i] = 0;
-	return (s12);
+	len = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!len)
+		return (NULL);
+	while (s1[++i])
+		len[i] = s1[i];
+	while (s2[j])
+		len[i++] = s2[j++];
+	len[i] = '\0';
+	free(s1);
+	return (len);
 }
+
+// int	main(void)
+// {
+// 	char	*s1;
+
+// 	s1 = "oktgtgrhgrthrth";
+// 	printf("%d\n", ft_checkline(s1));
+// 	return(0);
+// }

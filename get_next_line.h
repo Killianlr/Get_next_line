@@ -11,5 +11,6 @@ char	*get_next_line(int fd);
 int		ft_strlen(char *str);
 char	*ft_strjoin(char *s1, char *s2);
 void	*ft_calloc(int nmemb, int size);
-char	*ft_strchr(char *s, int c);
+int		ft_checkline(char *s);
+
 #endif
