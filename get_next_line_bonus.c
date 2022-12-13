@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 15:53:40 by kle-rest          #+#    #+#             */
-/*   Updated: 2022/12/11 16:04:30 by kle-rest         ###   ########.fr       */
+/*   Updated: 2022/12/13 17:10:15 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ char	*ft_line(char *stash)
 	int		i;
 
 	i = 0;
+	if (stash[0] == '\0')
+		return (NULL);
 	line = ft_calloc(sizeof(char), (ft_strlen(stash) + 1));
 	while (stash[i] && stash[i] != '\n')
 	{
@@ -88,10 +90,8 @@ char	*get_next_line(int fd)
 	static char	*stash[1024];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 1023 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!stash[fd])
-		stash[fd] = ft_calloc(sizeof(char), 1);
 	stash[fd] = ft_read(fd, stash[fd]);
 	if (!stash[fd])
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 12:37:40 by kle-rest          #+#    #+#             */
-/*   Updated: 2022/12/11 16:10:18 by kle-rest         ###   ########.fr       */
+/*   Updated: 2022/12/11 18:07:46 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ char	*ft_line(char *stash)
 	int		i;
 
 	i = 0;
+	if (stash[0] == '\0')
+		return (NULL);
 	line = ft_calloc(sizeof(char), (ft_strlen(stash) + 1));
 	while (stash[i] && stash[i] != '\n')
 	{
@@ -71,13 +73,12 @@ char	*ft_read(int fd, char *stash)
 	while (ret != 0 && ft_checkline(stash) == 0)
 	{
 		ret = read(fd, bufread, BUFFER_SIZE);
-		printf("ret === %d\n", ret);
 		if (ret == -1)
 		{
 			free(bufread);
 			return (NULL);
 		}
-		bufread[ret] = 0;
+		bufread[ret] = '\0';
 		stash = ft_strjoin(stash, bufread);
 	}
 	free(bufread);
@@ -90,9 +91,7 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (!stash)
-		stash = ft_calloc(sizeof(char), 1);
+		return (0);
 	stash = ft_read(fd, stash);
 	if (!stash)
 		return (NULL);
@@ -100,29 +99,3 @@ char	*get_next_line(int fd)
 	stash = ft_next(stash);
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*line;
-
-// 	fd = open("test", O_RDONLY);
-// 	if (fd == -1)
-// 		return (1);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	return (0);
-// }

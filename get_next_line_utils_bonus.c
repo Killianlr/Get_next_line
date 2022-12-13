@@ -6,7 +6,7 @@
 /*   By: kle-rest <kle-rest@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/11 16:01:51 by kle-rest          #+#    #+#             */
-/*   Updated: 2022/12/11 16:04:21 by kle-rest         ###   ########.fr       */
+/*   Updated: 2022/12/11 17:35:36 by kle-rest         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = -1;
 	j = 0;
+	if (!s1)
+		s1 = ft_calloc(sizeof(char), 1);
 	if (!s1 || !s2)
 		return (NULL);
 	len = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
